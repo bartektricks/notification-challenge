@@ -1,8 +1,10 @@
 import NotificationCard from "./ NotificationCard"
 import NotificationBox from "./NotifiactionBox"
-import { getNotifications } from "./api"
+import { getInitialNotifications, getNextNotifications } from "./api"
 
-const notifications = getNotifications()
+const notifications = getInitialNotifications()
+
+const nextNotifications = getNextNotifications(51)
 
 function App() {
   const newNutoficationsNumber = notifications.reduce((sum, notification) => {
@@ -15,7 +17,7 @@ function App() {
   return (
     <div className="flex h-screen justify-center bg-snow sm:items-center sm:px-6">
       <NotificationBox newNotificationsNumber={newNutoficationsNumber}>
-        {notifications.map((notification) => (
+        {nextNotifications.map((notification) => (
           <NotificationCard key={notification.id} {...notification} />
         ))}
       </NotificationBox>

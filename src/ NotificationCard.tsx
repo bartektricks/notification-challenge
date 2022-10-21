@@ -1,8 +1,8 @@
-import { GetNotificationsProps } from "./api"
-import { getRelativeTime } from "./helpers"
+import { SingleNotificationType } from "./api"
+import { getRelativeTime, StrictUnion } from "./helpers"
 
 type NotificationMessagesType = {
-  [k in GetNotificationsProps["type"]]: string
+  [k in SingleNotificationType["type"]]: string
 }
 
 const NotificationMessages: NotificationMessagesType = {
@@ -20,9 +20,9 @@ const NotificationCard = ({
   user,
   type,
   picture,
-  item,
   message,
-}: Omit<GetNotificationsProps, "id">) => {
+  item,
+}: StrictUnion<SingleNotificationType>) => {
   return (
     <button
       type="button"
@@ -32,9 +32,11 @@ const NotificationCard = ({
     >
       <div className="flex gap-4">
         <img
-          className="h-10 w-10 sm:h-11 sm:w-11"
+          className="h-full rounded-full"
           src={user.avatar}
           alt={user.name}
+          width="45"
+          height="45"
         />
         <div className="flex flex-col">
           <div>
@@ -72,8 +74,14 @@ const NotificationCard = ({
           )}
         </div>
         {picture && (
-          <a className="ml-auto mr-0 h-10 w-10 sm:h-11 sm:w-11" href={picture}>
-            <img src={picture} alt={user.name + " picture"} />
+          <a className="ml-auto mr-0" href={picture}>
+            <img
+              className="h-full rounded-sm"
+              src={picture}
+              alt={user.name + " picture"}
+              width="45"
+              height="45"
+            />
           </a>
         )}
       </div>

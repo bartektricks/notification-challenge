@@ -1,46 +1,68 @@
-type SharedProps = {
-  id: string
-  isNew?: boolean
-  date: Date
-  user: {
-    name: string
-    link: string
-    avatar: string
+import { faker } from "@faker-js/faker"
+
+export type SingleNotificationType = ReturnType<typeof getRandomNotification>
+
+const NotificationTypes = [
+  "FOLLOWED",
+  "JOINED",
+  "REACTED",
+  "LEFT",
+  "COMMENTED",
+  "MESSAGED",
+] as const
+
+const getRandomNotification = () => {
+  const notificationType = faker.helpers.arrayElement(NotificationTypes)
+  const name = faker.name.fullName()
+
+  const userData = {
+    id: faker.datatype.uuid(),
+    type: notificationType,
+    isNew: true,
+    date: faker.date.recent(0.1),
+    user: {
+      name,
+      link: faker.helpers.slugify(name),
+      avatar: faker.image.avatar(),
+    },
+  }
+
+  if (notificationType === "FOLLOWED") {
+    return userData
+  }
+
+  if (notificationType === "COMMENTED") {
+    return {
+      ...userData,
+      picture: faker.image.image(45, 45, true),
+    }
+  }
+
+  if (notificationType === "MESSAGED") {
+    return {
+      ...userData,
+      message: faker.lorem.paragraph(faker.helpers.arrayElement([1, 2, 3])),
+    }
+  }
+
+  const productName = faker.commerce.productName()
+
+  return {
+    ...userData,
+    item: {
+      name: productName,
+      link: faker.helpers.slugify(productName),
+    },
   }
 }
 
-type ConditionalProps =
-  | {
-      type: "FOLLOWED"
-      item?: never
-      picture?: never
-      message?: never
-    }
-  | {
-      type: "JOINED" | "REACTED" | "LEFT"
-      item: {
-        name: string
-        link: string
-      }
-      picture?: never
-      message?: never
-    }
-  | {
-      type: "COMMENTED"
-      picture: string
-      item?: never
-      message?: never
-    }
-  | {
-      type: "MESSAGED"
-      message: string
-      item?: never
-      picture?: never
-    }
+export function getNextNotifications(count: number) {
+  return Array(count)
+    .fill(0)
+    .map(() => getRandomNotification())
+}
 
-export type GetNotificationsProps = SharedProps & ConditionalProps
-
-export function getNotifications(): GetNotificationsProps[] {
+export function getInitialNotifications(): SingleNotificationType[] {
   return [
     {
       id: "mark-webber-1",
@@ -61,6 +83,7 @@ export function getNotifications(): GetNotificationsProps[] {
       id: "angela-gray-1",
       type: "FOLLOWED",
       date: new Date(),
+      isNew: true,
       user: {
         name: "Angela Gray",
         link: "#",
@@ -71,6 +94,7 @@ export function getNotifications(): GetNotificationsProps[] {
       id: "jacob-thompson-1",
       type: "JOINED",
       date: new Date(),
+      isNew: false,
       user: {
         name: "Jacob Thompson",
         link: "#",
@@ -85,6 +109,7 @@ export function getNotifications(): GetNotificationsProps[] {
       id: "rizky-asanuddin-1",
       type: "MESSAGED",
       date: new Date(),
+      isNew: false,
       user: {
         name: "Rizky Hasanuddin",
         link: "#",
@@ -97,6 +122,7 @@ export function getNotifications(): GetNotificationsProps[] {
       id: "rizky-hasanuddin-2",
       type: "COMMENTED",
       date: new Date(),
+      isNew: false,
       user: {
         name: "Rizky Hasanuddin",
         link: "#",
