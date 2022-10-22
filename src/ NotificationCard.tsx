@@ -48,7 +48,7 @@ const NotificationCard = ({
       tabIndex={0}
       onClick={handleMarkAsRead}
       className={`w-full rounded-md p-4 text-left sm:p-5 ${
-        isNew ? "bg-lightGreyBlue" : "cursor-default"
+        isNew ? "bg-snow" : "cursor-default"
       }`}
     >
       <div className="flex gap-4">
