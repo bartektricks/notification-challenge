@@ -44,8 +44,8 @@ const NotificationCard = ({
   }
 
   return (
-    <button
-      type="button"
+    <div
+      tabIndex={0}
       onClick={handleMarkAsRead}
       className={`w-full rounded-md p-4 text-left sm:p-5 ${
         isNew ? "bg-lightGreyBlue" : "cursor-default"
@@ -106,7 +106,7 @@ const NotificationCard = ({
           </a>
         )}
       </div>
-    </button>
+    </div>
   )
 }
 
