@@ -53,11 +53,9 @@ const NotificationCard = ({
     >
       <div className="flex gap-4">
         <img
-          className="h-full rounded-full"
+          className="h-11 w-11 rounded-full"
           src={user.avatar}
           alt={user.name}
-          width="45"
-          height="45"
         />
         <div className="flex flex-col">
           <div>
@@ -97,11 +95,9 @@ const NotificationCard = ({
         {picture && (
           <a className="ml-auto mr-0" href={picture}>
             <img
-              className="h-full rounded-sm"
+              className="h-11 w-11 rounded-sm"
               src={picture}
               alt={user.name + " picture"}
-              width="45"
-              height="45"
             />
           </a>
         )}
