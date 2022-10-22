@@ -1,13 +1,56 @@
-import { FunctionComponent, PropsWithChildren } from "react"
+import {
+  FunctionComponent,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+} from "react"
 
-type NotificationBoxProps = PropsWithChildren & {
-  newNotificationsNumber?: number
-}
+import { getNextNotifications, SingleNotificationType } from "./api"
+import { NotificationsContext } from "./NotificationsContextProvider"
 
-const NotificationBox: FunctionComponent<NotificationBoxProps> = ({
-  newNotificationsNumber,
+const getNotificationsCount = (notificationsArray: SingleNotificationType[]) =>
+  notificationsArray.filter(({ isNew }) => isNew).length
+
+const NotificationBox: FunctionComponent<PropsWithChildren> = ({
   children,
 }) => {
+  const [notifications, setNotifications] = useContext(NotificationsContext)
+  const notificationsCount = notifications
+    ? getNotificationsCount(notifications)
+    : 0
+
+  const handleMarkAllAsRead = () => {
+    if (!notificationsCount) return
+
+    setNotifications((prevNotifications) =>
+      prevNotifications.map((prevNotification) => ({
+        ...prevNotification,
+        isNew: false,
+      })),
+    )
+  }
+
+  useEffect(() => {
+    if (notificationsCount > 0) return
+
+    const timeoutRef = setTimeout(() => {
+      setNotifications((prevNotifications) => {
+        const newNotifications = [
+          ...getNextNotifications(6),
+          ...prevNotifications,
+        ]
+
+        return newNotifications.length >= 20
+          ? newNotifications.slice(0, -10)
+          : newNotifications
+      })
+    }, 1500)
+
+    return () => {
+      clearTimeout(timeoutRef)
+    }
+  }, [notificationsCount])
+
   return (
     <div className="w-full max-w-3xl bg-white px-4 py-6 shadow-soft sm:p-8 md:rounded-lg">
       <div className="mb-6 flex justify-between">
@@ -15,13 +58,17 @@ const NotificationBox: FunctionComponent<NotificationBoxProps> = ({
           <h2 className="text-xl font-extrabold text-veryDarkGreyBlue">
             Notifications
           </h2>
-          {newNotificationsNumber && (
+          {Boolean(notificationsCount) && (
             <span className="rounded-lg bg-blue py-1 px-3 font-extrabold text-white">
-              {newNotificationsNumber}
+              {notificationsCount}
             </span>
           )}
         </div>
-        <button type="button" className="text-darkGreyBlue hover:text-blue">
+        <button
+          onClick={handleMarkAllAsRead}
+          type="button"
+          className="text-darkGreyBlue hover:text-blue"
+        >
           Mark all as read
         </button>
       </div>

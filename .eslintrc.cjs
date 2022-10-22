@@ -18,6 +18,7 @@ module.exports = {
   },
   plugins: ["react", "@typescript-eslint", "prettier"],
   rules: {
+    "@typescript-eslint/no-unused-vars": ["warn", { varsIgnorePattern: "^_" }],
     "react/react-in-jsx-scope": 0,
     "linebreak-style": ["error", "unix"],
     semi: ["error", "never"],

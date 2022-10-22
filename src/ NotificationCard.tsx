@@ -1,5 +1,7 @@
+import { useContext } from "react"
 import { SingleNotificationType } from "./api"
 import { getRelativeTime, StrictUnion } from "./helpers"
+import { NotificationsContext } from "./NotificationsContextProvider"
 
 type NotificationMessagesType = {
   [k in SingleNotificationType["type"]]: string
@@ -15,6 +17,7 @@ const NotificationMessages: NotificationMessagesType = {
 }
 
 const NotificationCard = ({
+  id,
   isNew,
   date,
   user,
@@ -23,9 +26,27 @@ const NotificationCard = ({
   message,
   item,
 }: StrictUnion<SingleNotificationType>) => {
+  const [_, setNotifications] = useContext(NotificationsContext)
+
+  const handleMarkAsRead = () => {
+    if (!isNew) return
+
+    setNotifications((prevNotifications) =>
+      prevNotifications.map((prevNotification) =>
+        prevNotification.id === id
+          ? {
+              ...prevNotification,
+              isNew: false,
+            }
+          : prevNotification,
+      ),
+    )
+  }
+
   return (
     <button
       type="button"
+      onClick={handleMarkAsRead}
       className={`w-full rounded-md p-4 text-left sm:p-5 ${
         isNew ? "bg-lightGreyBlue" : "cursor-default"
       }`}
@@ -68,7 +89,7 @@ const NotificationCard = ({
             <time className="text-greyBlue">{getRelativeTime(date)}</time>
           </div>
           {message && (
-            <blockquote className="mt-4 cursor-pointer rounded-md border border-veryLightGreyBlue p-4 hover:border-lightGreyBlue hover:bg-veryLightGreyBlue">
+            <blockquote className="mt-4 cursor-pointer rounded-md border border-veryLightGreyBlue bg-white p-4 hover:border-lightGreyBlue hover:bg-veryLightGreyBlue">
               {message}
             </blockquote>
           )}
