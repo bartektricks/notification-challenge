@@ -55,9 +55,9 @@ const NotificationBox: FunctionComponent<PropsWithChildren> = ({
     <div className="w-full max-w-3xl bg-white px-4 py-6 shadow-soft sm:p-8 md:rounded-lg">
       <div className="mb-6 flex justify-between">
         <div className="flex gap-2">
-          <h2 className="text-xl font-extrabold text-veryDarkGreyBlue">
+          <h1 className="text-xl font-extrabold text-veryDarkGreyBlue">
             Notifications
-          </h2>
+          </h1>
           {Boolean(notificationsCount) && (
             <span className="rounded-lg bg-blue py-1 px-3 font-extrabold text-white">
               {notificationsCount}
