@@ -72,7 +72,7 @@ const NotificationBox: FunctionComponent<PropsWithChildren> = ({
           Mark all as read
         </button>
       </div>
-      <div className="flex max-h-[80vh] flex-col gap-2 overflow-y-auto">
+      <div className="flex flex-col gap-2 overflow-y-auto sm:max-h-[80vh]">
         {children || <p>There are no notifications :(</p>}
       </div>
     </div>

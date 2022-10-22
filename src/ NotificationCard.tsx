@@ -53,7 +53,7 @@ const NotificationCard = ({
     >
       <div className="flex gap-4">
         <img
-          className="h-11 w-11 rounded-full"
+          className="h-11 w-11 shrink-0 rounded-full"
           src={user.avatar}
           alt={user.name}
         />
@@ -93,7 +93,7 @@ const NotificationCard = ({
           )}
         </div>
         {picture && (
-          <a className="ml-auto mr-0" href={picture}>
+          <a className="ml-auto mr-0 shrink-0" href={picture}>
             <img
               className="h-11 w-11 rounded-sm"
               src={picture}
